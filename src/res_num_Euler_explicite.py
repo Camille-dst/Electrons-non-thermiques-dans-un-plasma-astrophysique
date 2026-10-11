@@ -63,6 +63,7 @@ for step in range(n_steps):
 
 
 plt.figure(figsize=(8, 5))
+plt.ylim(10e-7,10e9 )
 plt.loglog(gamma, N, label='Euler explicite (numérique)', color='navy', lw=2)
 plt.xlabel(r'$\gamma$')
 plt.ylabel(r'$N(\gamma)$')
