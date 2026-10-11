@@ -17,10 +17,9 @@ Q = Q_0 * (gamma**(-s))
 Q[(gamma < gamma_min) | (gamma > gamma_max)] = 0.0
 
 #dt = 0.05 * T_ad          # Pas de temps (s)
-dt = 1.67       # Pas de temps (s)      
-print('le pas de temps est :', dt, 's')
+#dt = 1.67       # Pas de temps (s)      
 t_max = 5.0 * T_ad        # Temps de simulation total (s)
-n_steps = int(t_max / dt)
+
 
 '''
 verification de la condition CFL pour le pas de temps
@@ -28,12 +27,16 @@ On doit avoir dt < min(dgamma / |gamma_dot|)
     pour la stabilité de l'intégration
 
 '''
-dgamma = np.diff(gamma)               # Écart Δγ entre chaque point
-gamma_loss = K * gamma[:-1]**2        # |γ_dot| sur la grille (sans le dernier point)
-
+dgamma = np.diff(gamma)            
+gamma_loss = K * gamma[:-1]**2       
 dt_cfl_array = dgamma / gamma_loss
 dt_cfl_max = np.min(dt_cfl_array)
 print('le pas de temps CFL est :', dt_cfl_max, 's')
+
+safety_factor = 0.5
+dt = safety_factor * dt_cfl_max
+print('le pas de temps est :', dt, 's')
+n_steps = int(t_max / dt)
 
 if dt >= dt_cfl_max:
     print("WARNING : le pas de temps dt dépasse la limite CFL pour la stabilité.")
