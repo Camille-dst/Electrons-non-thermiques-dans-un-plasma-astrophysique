@@ -22,5 +22,6 @@ Q_0 = 1.0             # Normalisation de l'injection
 # ==========================================
 u_b = B**2 / (8 * np.pi)                        # Densité d'énergie magnétique (erg/cm³)
 K = (4 * u_b * sigma_t) / (3 * m_e * c)          # Coefficient de perte synchrotron (s⁻¹)
-T_ad = R / c                                     # Temps d'échappement (s)
+T_ad = R / c     
+print('le temps d\'échappement est :', T_ad, 's')                              # Temps d'échappement (s)
 gamma_c = 1.0 / (K * T_ad)                       # Facteur de Lorentz critique

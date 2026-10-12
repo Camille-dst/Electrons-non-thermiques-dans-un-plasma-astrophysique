@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from constant import gamma_c, K, gamma_min, gamma_max, s, Q_0, T_ad
-
+from N_analytical_comparaison import N_analytical_pure, N_analytical_exp
 
 '''
 Résolution de la ditribution d'électrons avec le terme de cooling 
@@ -65,13 +65,19 @@ for step in range(n_steps):
 
 
 
+N_theo = N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K)
+
+# Tracé comparatif
 plt.figure(figsize=(8, 5))
-plt.ylim(10e-7,10e9 )
-plt.loglog(gamma, N, label='Euler explicite (numérique)', color='navy', lw=2)
+plt.ylim(10e-9,10e9)
+plt.loglog(gamma, N, label='Numérique (Euler Explicite)', color='navy', lw=2)
+plt.loglog(gamma, N_theo, label='Analytique (Théorie)', color='crimson', ls='--', lw=2)
+
 plt.xlabel(r'$\gamma$')
 plt.ylabel(r'$N(\gamma)$')
-plt.title('Résolution avec cooling (Euler explicite)')
+plt.title('Validation du modèle avec Cooling')
 plt.legend()
+#plt.grid(True, which="both", ls="--", alpha=0.5)
 plt.savefig('Résolution avec cooling (Euler explicite).png', dpi=300)
 #plt.grid(True, standard_style=False, ls='--', alpha=0.5)
 plt.show()
