@@ -24,6 +24,7 @@ N = np.zeros_like(gamma) #intialisation
 t_current = 0.0
 
 #Euler explicite
+plt.figure(figsize = (8,5))
 for step in range(n_steps):
     dN_dt = Q - (N / T_ad)  # Équation différentielle
     N += dN_dt * dt        # Mise à jour de N
@@ -35,13 +36,12 @@ for step in range(n_steps):
 
 N_cooling_exacte = Q * T_ad * (1.0 - np.exp(-t_max / T_ad))  # Solution exacte pour comparaison
 
-plt.figure(figsize=(8, 5))
 plt.loglog(gamma, N, label='Euler explicite (numérique)', color='navy', lw=2)
 plt.loglog(gamma, N_cooling_exacte, label=r'Asymptote $Q(\gamma) \cdot t_{\text{esc}}$', color='crimson', ls='--')
+
 plt.xlabel(r'$\gamma$')
 plt.ylabel(r'$N(\gamma)$')
 plt.title('Résolution sans cooling (Euler explicite)')
 plt.legend()
 plt.savefig('Résolution sans cooling (Euler explicite).png', dpi=300)
-#plt.grid(True, standard_style=False, ls='--', alpha=0.5)
 plt.show()

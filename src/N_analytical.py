@@ -26,7 +26,7 @@ def integrer_Q_y_exp (gamma, gamma_c, gamma_max,s , Q_0):
     """
     Q_gp = Q_0 * (gamma**(-s)) * np.exp(-gamma / gamma_max)
     exposant = gamma_c / gamma
-    return (Q_gp * np.exp(exposant))
+    return Q_gp * np.exp(exposant)
 
 def integrer_Q_y (gamma, gamma_c, gamma_max,s , Q_0):
     """
@@ -48,7 +48,7 @@ def integrer_Q_y (gamma, gamma_c, gamma_max,s , Q_0):
     """
     Q_gp = Q_0 * (gamma**(-s))
     exposant = gamma_c / gamma
-    return (Q_gp * np.exp(exposant))
+    return Q_gp * np.exp(exposant)
 
 def N_analytical(gamma,gamma_c,gamma_min,gamma_max,s,Q_0,K):
     """
