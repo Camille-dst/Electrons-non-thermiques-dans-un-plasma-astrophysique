@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from constant import gamma_c, K, gamma_min, gamma_max, s, Q_0, T_ad
-from N_analytical_comparaison import N_analytical_pure
+from N_analytical_comparaison import N_analytical_pure, N_analytical_exp
 
 '''
 Résolution de la ditribution d'électrons avec le terme de cooling 
@@ -39,6 +39,7 @@ def solve_euler_explicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safet
     dt = safety_factor * dt_cfl_max
     print('le pas de temps choisie est :', dt, 's')
     n_steps = int(t_max / dt)
+    print('le nombre de steps est', n_steps)
 
     if dt >= dt_cfl_max:
         print("WARNING : le pas de temps dt dépasse la limite CFL pour la stabilité.")
@@ -65,11 +66,11 @@ def solve_euler_explicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safet
         N += dN_dt * dt        # Mise à jour de N
     return N
 
-#s_val =2
-#gamma = np.logspace(0, 7, 400) #pour le test
-#N = solve_euler_explicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safety_factor=0.5, t_max_factor=5.0)
+s_val =2
+gamma = np.logspace(0, 7, 400) #pour le test
+N = solve_euler_explicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safety_factor=0.5, t_max_factor=5.0)
 
-'''if __name__ == "__main__":
+if __name__ == "__main__":
 
     N_theo = N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K)
 
@@ -86,4 +87,3 @@ def solve_euler_explicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safet
     plt.tight_layout()
     plt.savefig('Résolution avec cooling (Euler explicite).png', dpi=300)
     plt.show()
-'''

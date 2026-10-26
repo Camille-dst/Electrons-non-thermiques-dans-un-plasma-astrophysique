@@ -10,27 +10,49 @@ from N_analytical import N_analytical_exp
 K_norm = Q_0 * T_ad
 
 
-def integrer_pure(gamma_p, g, gamma_c, gamma_max, s, Q_0):
-    Q_gp = Q_0 * (gamma_p**(-s))
+def integrer_pure(gamma_p,g, gamma_c,gamma_min, gamma_max, s, Q_0):
+    if gamma_min <= gamma_p <= gamma_max:
+        Q_gp = Q_0 * (gamma_p**(-s))
+    else :
+        Q_gp = 0.0
     exposant = -gamma_c * (1.0 / g - 1.0 / gamma_p)  # Formule stabilisée
     return Q_gp * np.exp(exposant)
 
+'''
 def N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
     N = np.zeros_like(gamma)
     for i, g in enumerate(gamma):
-        if gamma_min <= g <= gamma_max:
-            I, _ = quad(integrer_pure, g, gamma_max, args=(g, gamma_c, gamma_max, s, Q_0))
+        if g <= gamma_max:
+            I, _ = quad(integrer_pure, g, gamma_max, args=(g,gamma_c,gamma_min, gamma_max, s, Q_0))
             N[i] = I / (K * g**2)
     return N
 
+'''
+def N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
+    N = np.zeros_like(gamma)
+    for i, g in enumerate(gamma):
+        gamma_p_sub = gamma[gamma >= g]
+        
+        if len(gamma_p_sub) > 1:
+            # On évalue la fonction pour chaque point de la sous-grille
+            y_vals = [integrer_pure(gp, g, gamma_c, gamma_min, gamma_max, s, Q_0) for gp in gamma_p_sub]
+            
+            #  méthode des trapèzes
+            I = np.trapezoid(y_vals, gamma_p_sub)
+            N[i] = I / (K * g**2)
+            
+    return N
 
-def integrer_Q_y_exp(gamma_p, g, gamma_c, gamma_max, s, Q_0):
-    Q_gp = Q_0 * (gamma_p**(-s)) * np.exp(-gamma_p / gamma_max)
+def integrer_Q_y_exp(gamma_p, g, gamma_c,gamma_min, gamma_max, s, Q_0):
+    if gamma_min <= gamma_p <= gamma_max:
+        Q_gp = Q_0 * (gamma_p**(-s)) * np.exp(-gamma_p / gamma_max)
+    else :
+        Q_gp = 0.0
     exposant = -gamma_c * (1.0 / g - 1.0 / gamma_p)
     
     return Q_gp * np.exp(exposant)
 
-
+'''
 def N_analytical_exp(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
     N = np.zeros_like(gamma)
 
@@ -41,10 +63,26 @@ def N_analytical_exp(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
             N[i] = I / (K * g**2)
             
     return N
+'''
 
+def N_analytical_exp(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
+    N = np.zeros_like(gamma)
+    for i, g in enumerate(gamma):
+        gamma_p_sub = gamma[gamma >= g]
+        
+        if len(gamma_p_sub) > 1:
+            # On évalue la fonction pour chaque point de la sous-grille
+            y_vals = [integrer_Q_y_exp(gp, g, gamma_c, gamma_min, gamma_max, s, Q_0) for gp in gamma_p_sub]
+            
+            #  méthode des trapèzes
+            I = np.trapezoid(y_vals, gamma_p_sub)
+            N[i] = I / (K * g**2)
+            
+    return N
 
+gamma = np.logspace(0, 7, 400)
 if __name__ == "__main__":
-    gamma = np.logspace(0, 7, 400)
+    
 
     N_pure = N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K)
     N_exp = N_analytical_exp(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K)
