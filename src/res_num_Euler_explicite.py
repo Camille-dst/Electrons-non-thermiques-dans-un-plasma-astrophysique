@@ -72,18 +72,18 @@ N = solve_euler_explicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safet
 
 if __name__ == "__main__":
 
-    N_theo = N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K)
+    N_theo = N_analytical_exp(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K)
 
     # Tracé comparatif
     plt.figure(figsize=(8, 5))
-    plt.ylim(10e-9,10e9)
-    plt.loglog(gamma, N, label='Numérique (Euler Explicite)', color='navy', lw=2)
-    plt.loglog(gamma, N_theo, label='Analytique (Théorie)', color='crimson', ls='--', lw=2)
+    plt.ylim(10,10e9)
+    plt.loglog(gamma, N*gamma**2, label='Numérique (Euler Explicite)', color='navy', lw=2)
+    plt.loglog(gamma, N_theo*gamma**2, label='Analytique (Théorie)', color='crimson', ls='--', lw=2)
 
     plt.xlabel(r'$\gamma$')
     plt.ylabel(r'$N(\gamma)$')
     plt.title('Validation du modèle avec Cooling')
     plt.legend()
     plt.tight_layout()
-    plt.savefig('Résolution avec cooling (Euler explicite).png', dpi=300)
+    plt.savefig('Résolution avec cooling (exp) (Euler explicite) en gamma*2.png', dpi=300)
     plt.show()
