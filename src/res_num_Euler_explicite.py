@@ -66,9 +66,11 @@ def solve_euler_explicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safet
         N += dN_dt * dt        # Mise à jour de N
     return N
 
+'''
 s_val =2
 gamma = np.logspace(0, 7, 400) #pour le test
 N = solve_euler_explicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safety_factor=0.5, t_max_factor=5.0)
+
 
 if __name__ == "__main__":
 
@@ -87,3 +89,5 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.savefig('Résolution avec cooling (exp) (Euler explicite) en gamma*2.png', dpi=300)
     plt.show()
+
+'''
