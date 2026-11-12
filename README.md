@@ -22,3 +22,5 @@ $$\dot{\gamma}_{\text{cool}} = - \beta \gamma^2 = - \frac{4}{3} \frac{\sigma_T c
    [Article arXiv (abs/1202.5949)](https://arxiv.org/abs/1202.5949)
 2. **S. Inoue & F. Takahara (1996)**, *ApJ 463, 555*.  
    [PDF ADS Harvard](https://articles.adsabs.harvard.edu/pdf/1996ApJ...463..555I)
+3. **Sari, Re'em. Piran, Tsvi.Narayan (1998)**, *
+    [Article arXiv] (arXiv:astro-ph/9712005 )
