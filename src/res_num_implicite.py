@@ -4,7 +4,7 @@ from constant import gamma_c, K, gamma_min, gamma_max, s, Q_0, T_ad
 from N_analytical_comparaison import N_analytical_exp, N_analytical_pure
 
 
-def solve_euler_implicit(gamma, s, Q_0, gamma_min, gamma_max, K, T_ad, safety_factor=0.5, t_max_factor=5.0):
+def solve_euler_implicit(gamma, s, Q_0, gamma_min, gamma_max, K, T_ad, safety_factor=0.5, t_max = 5*T_ad):
 
     N = np.zeros(len(gamma))  # État initial vide
 
@@ -12,7 +12,6 @@ def solve_euler_implicit(gamma, s, Q_0, gamma_min, gamma_max, K, T_ad, safety_fa
     Q[(gamma < gamma_min) | (gamma > gamma_max)] = 0.0
 
     dt = 100*safety_factor
-    t_max = 5*T_ad
 
     # Boucle temporelle vers l'état stationnaire
     t = 0.0
@@ -47,7 +46,7 @@ def solve_euler_implicit(gamma, s, Q_0, gamma_min, gamma_max, K, T_ad, safety_fa
 
 s_val =2
 gamma = np.logspace(0, 7, 400) #pour le test
-N = solve_euler_implicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safety_factor=0.5, t_max_factor=5.0)
+N = solve_euler_implicit(gamma, s_val, Q_0, gamma_min, gamma_max, K, T_ad, safety_factor=0.5, t_max=5.0)
 
 
 if __name__ == "__main__":
