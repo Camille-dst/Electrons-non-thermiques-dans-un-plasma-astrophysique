@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
+from numpy.polynomial.legendre import leggauss
 
 from constant import gamma_c, K, gamma_min, gamma_max, s, Q_0, T_ad
 from N_approx import N_approx
@@ -18,6 +19,8 @@ def integrer_pure(gamma_p,g, gamma_c,gamma_min, gamma_max, s, Q_0):
     exposant = -gamma_c * (1.0 / g - 1.0 / gamma_p)  # Formule stabilisée
     return Q_gp * np.exp(exposant)
 
+
+#resolution avec quad , bcp de problème de résolution
 '''
 def N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
     N = np.zeros_like(gamma)
@@ -26,8 +29,10 @@ def N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
             I, _ = quad(integrer_pure, g, gamma_max, args=(g,gamma_c,gamma_min, gamma_max, s, Q_0))
             N[i] = I / (K * g**2)
     return N
-
 '''
+
+
+#resolutino avec trapezoid, mieux mais toujours un probléme de résolution
 def N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
     N = np.zeros_like(gamma)
     for i, g in enumerate(gamma):
@@ -42,6 +47,8 @@ def N_analytical_pure(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
             N[i] = I / (K * g**2)
             
     return N
+
+
 
 def integrer_Q_y_exp(gamma_p, g, gamma_c,gamma_min, gamma_max, s, Q_0):
     if gamma_min <= gamma_p <= gamma_max:
@@ -58,7 +65,7 @@ def N_analytical_exp(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
 
     for i, g in enumerate(gamma):
         if gamma_min <= g <= gamma_max:
-            I, err = quad(integrer_Q_y_exp, g, gamma_max, args=(g, gamma_c, gamma_max, s, Q_0))
+            I, err = quad(integrer_Q_y_exp, g, gamma_max, args=(g, gamma_c,gamma_min, gamma_max, s, Q_0))
         
             N[i] = I / (K * g**2)
             
@@ -80,7 +87,8 @@ def N_analytical_exp(gamma, gamma_c, gamma_min, gamma_max, s, Q_0, K):
             
     return N
 
-gamma = np.logspace(0, 7, 400)
+
+gamma = np.logspace(0, 7, 4000)
 if __name__ == "__main__":
     
 
@@ -89,19 +97,19 @@ if __name__ == "__main__":
     N_approx_values = N_approx(gamma, s=s, gamma_c=gamma_c, K=K_norm)
 
     plt.figure(figsize=(9, 6))
-    plt.loglog(gamma, N_pure, label=r'$N_{\text{stat}}$ (loi de puissance pure $Q \propto \gamma^{-s}$)', color='navy', lw=2)
-    plt.loglog(gamma, N_exp, label=r'$N_{\text{stat}}$ (coupure exp $Q \propto \gamma^{-s} e^{-\gamma/\gamma_{\max}}$)', color='black', lw=2, ls='--')
-    plt.loglog(gamma, N_approx_values, label=r'Approximation Éq. 2.28', color='violet', linestyle=':')
+    plt.loglog(gamma, N_pure*gamma**2, label=r'$N_{\text{stat}}$ (loi de puissance pure $Q \propto \gamma^{-s}$)', color='navy', lw=2)
+    plt.loglog(gamma, N_exp*gamma**2, label=r'$N_{\text{stat}}$ (coupure exp $Q \propto \gamma^{-s} e^{-\gamma/\gamma_{\max}}$)', color='black', lw=2, ls='--')
+    plt.loglog(gamma, N_approx_values*gamma**2, label=r'Approximation Éq. 2.28', color='violet', linestyle=':')
 
     # Repères visuels
     plt.axvline(gamma_min, color='gray', linestyle=':', label=rf'$\gamma_{{\min}} = {gamma_min}$')
     plt.axvline(gamma_max, color='gray', linestyle=':', label=rf'$\gamma_{{\max}} = {gamma_max:.0e}$')
     plt.axvline(gamma_c, color='red', linestyle='--', label=rf'$\gamma_c = {gamma_c:.2e}$')
 
-    plt.ylim(10e-15, 10e6)
+    plt.ylim(10e0, 10e9)
     plt.xlabel(r'Facteur de Lorentz $\gamma$', fontsize=12)
-    plt.ylabel(r'$N(\gamma)$ [u.a.]', fontsize=12)
-    plt.title(r'Comparaison des formes d\'injection $Q(\gamma)$', fontsize=13)
+    plt.ylabel(r'$N(\gamma)*\gamma^2$ [u.a.]', fontsize=12)
+    plt.title(r'Comparaison des formes d\'injection $Q(\gamma)$ pour resolution gauss_legendre', fontsize=13)
     plt.legend(fontsize=9)
     plt.tight_layout()
 
